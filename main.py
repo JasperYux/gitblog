@@ -9,11 +9,11 @@ from github import Github
 from lxml.etree import CDATA
 from marko.ext.gfm import gfm as marko
 
-MD_HEAD = """**<p align="center">[JasperYux's Blog](https://jasperyux.github.io/gitblog/)</p>**
+MD_HEAD = """**<p align="center">[JasperYux's Blog](https://jasperyux.github.io/)</p>**
 **<p align="center">记录、叙述、回忆</p>**
 ## 联系方式
 - Email：[yxzzzzzz8@163.com](mailto:yxzzzzzz8@163.com)
-- Blog：[JasperYux's Blog](https://jasperyux.github.io/gitblog/)
+- Blog：[JasperYux's Blog](https://jasperyux.github.io/)
 """
 
 BACKUP_DIR = "BACKUP"

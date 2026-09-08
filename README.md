@@ -1,8 +1,8 @@
-**<p align="center">[JasperYux's Blog](https://jasperyux.github.io/gitblog/)</p>**
+**<p align="center">[JasperYux's Blog](https://jasperyux.github.io/)</p>**
 **<p align="center">记录、叙述、回忆</p>**
 ## 联系方式
 - Email：[yxzzzzzz8@163.com](mailto:yxzzzzzz8@163.com)
-- Blog：[JasperYux's Blog](https://jasperyux.github.io/gitblog/)
+- Blog：[JasperYux's Blog](https://jasperyux.github.io/)
 
 ## 置顶文章
 - [2026年个人周报](https://github.com/JasperYux/gitblog/issues/5)--2026-05-29

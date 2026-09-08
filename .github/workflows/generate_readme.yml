@@ -11,38 +11,52 @@ on:
       - master
     paths:
       - main.py
+      - .github/workflows/generate_readme.yml
+
+permissions:
+  contents: write
+  issues: read
+
+concurrency:
+  group: generate-readme
+  cancel-in-progress: false
 
 jobs:
   sync:
     name: Generate README
     runs-on: ubuntu-latest
-    if: github.repository_owner_id == github.event.issue.user.id || github.event_name == 'push'
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.repository_owner_id == github.event.issue.user.id
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/checkout@v4
         with:
-          python-version: 3.8
+          ref: master
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
           cache: pip
-          cache-dependency-path: "requirements.txt"
+          cache-dependency-path: requirements.txt
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt
+        run: python -m pip install -r requirements.txt
 
       - name: Generate new md
-        run: |
-          source venv/bin/activate
-          python main.py ${{ secrets.G_T }} ${{ github.repository }} --issue_number '${{ github.event.issue.number }}'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO_NAME: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GITHUB_NAME: ${{ github.repository_owner }}
+        run: python main.py "$GH_TOKEN" "$REPO_NAME" --issue_number "$ISSUE_NUMBER"
 
       - name: Push README
         run: |
-          git config --local user.email "yxzzzzzz8@163.com"
-          git config --local user.name "jasperyux"
-          git add BACKUP/*.md
-          git commit -a -m 'update new blog' || echo "nothing to commit"
-          git push || echo "nothing to push"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add README.md feed.xml BACKUP/
+          if git diff --cached --quiet; then
+            echo "No blog changes to commit"
+            exit 0
+          fi
+          git commit -m 'update blog index and backups'
+          git push origin HEAD:master

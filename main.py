@@ -9,15 +9,16 @@ from github import Github
 from lxml.etree import CDATA
 from marko.ext.gfm import gfm as marko
 
-MD_HEAD = """**<p align="center">[Leeyom's Blog](https://blog.leeyom.top)</p>**
-**<p align="center">~</p>**
+MD_HEAD = """**<p align="center">[JasperYux's Blog](https://jasperyux.github.io/gitblog/)</p>**
+**<p align="center">记录、叙述、回忆</p>**
 ## 联系方式
-- Email：[163](mailto:yxzzzzzz8@163.com)
+- Email：[yxzzzzzz8@163.com](mailto:yxzzzzzz8@163.com)
+- Blog：[JasperYux's Blog](https://jasperyux.github.io/gitblog/)
 """
 
 BACKUP_DIR = "BACKUP"
 ANCHOR_NUMBER = 5
-TOP_ISSUES_LABELS = ["Top"]
+TOP_ISSUES_LABELS = ["TOP"]
 TODO_ISSUES_LABELS = ["TODO"]
 FRIENDS_LABELS = ["Friends"]
 ABOUT_LABELS = ["About"]
@@ -260,7 +261,7 @@ def generate_rss_feed(repo, filename, me):
     generator.id(repo.html_url)
     generator.title(f"RSS feed of {repo.owner.login}'s {repo.name}")
     generator.author(
-        {"name": os.getenv("GITHUB_NAME"), "email": os.getenv("GITHUB_EMAIL")}
+        {"name": os.getenv("GITHUB_NAME") or me}
     )
     generator.link(href=repo.html_url)
     generator.link(
@@ -284,8 +285,8 @@ def generate_rss_feed(repo, filename, me):
 
 def main(token, repo_name, issue_number=None, dir_name=BACKUP_DIR):
     user = login(token)
-    me = get_me(user)
     repo = get_repo(user, repo_name)
+    me = repo.owner.login
     # add to readme one by one, change order here
     add_md_header("README.md", repo_name)
     for func in [add_md_firends, add_md_top, add_md_recent, add_md_label, add_md_todo]:
